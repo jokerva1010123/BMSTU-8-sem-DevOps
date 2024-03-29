@@ -1,0 +1,39 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - mkdir -p build
+    - convert -size 360x360 xc:white -font "FreeMono" -pointsize 12 -fill black -draw  @static/logo.txt build/logo.png
+
+  artifacts:
+    paths:
+      - build/
+
+test:
+  stage: test
+  before_script:
+    - chmod 400 $SSH_PRV_KEY
+    - chmod +x ./test.sh 
+  script:
+    - ./test.sh
+    
+  needs:
+    - build
+
+deploy_img:
+  stage: deploy
+  before_script:
+    - chmod 400 $SSH_PRV_KEY
+    - chmod +x ./deploy.sh
+  script:
+    - ./deploy.sh
+  needs:
+    - build
+ 
+  rules:
+    - if: ($CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "lab_02")
+      when: manual 
