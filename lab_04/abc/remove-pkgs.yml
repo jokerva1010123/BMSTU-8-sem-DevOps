@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install apache2 and php support lib package
+    package: 
+      name: 
+        - apache2
+        - libapache2-mod-php
+      state: absent
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"

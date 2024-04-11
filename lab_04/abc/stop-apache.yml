@@ -1,0 +1,11 @@
+---
+
+- hosts: vm2
+  become: true
+  tasks:
+
+  - name: Stop apache service
+    service:
+      name: apache2
+      state: stopped
+

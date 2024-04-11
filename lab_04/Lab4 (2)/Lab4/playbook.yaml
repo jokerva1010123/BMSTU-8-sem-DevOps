@@ -1,0 +1,37 @@
+- name: Play for VM1
+  hosts: VM1
+  become: yes
+  pre_tasks:
+  - name: Install python 2
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+  tasks:
+   - name: Install Nginx
+     become: true 
+     apt: 
+       name: nginx
+       state: latest
+       update-cache: yes
+
+
+- name: Play for VM2
+  hosts: VM2
+  become: yes
+  tasks:
+   - name: Install Apache
+     become: true 
+     apt: 
+       name: apache2
+       state: latest
+       update-cache: yes
+
+- name: Play for both VMs
+  hosts: Oba
+  become: yes
+  tasks:
+   - name: Install Apache Benchmark
+     become: true 
+     apt: 
+       name: apache2-utils
+       state: latest
+       update-cache: yes
